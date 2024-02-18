@@ -9,7 +9,6 @@ export const userController = {
             whatsapp,
             instagram,
             facebook,
-            registration_date
         } = req.body;
         const picture = req.file.path
 
@@ -31,7 +30,6 @@ export const userController = {
                 facebook,
                 instagram,
                 Picture:picture,
-                registration_date,
                 password: hashedPassword,
                 role: role || " artist",
             });
@@ -104,7 +102,7 @@ export const userController = {
                 whatsapp,
                 instagram,
                 facebook,
-                registration_date} = req.body;
+                } = req.body;
 
             if (password && (typeof password !== "string" || password.length === 0)) {
                 return res.status(400).json({ error: "Invalid password in the request body" });
@@ -139,7 +137,6 @@ export const userController = {
                     whatsapp,
                     instagram,
                     facebook,
-                    registration_date
                 },
                 {
                     new: true,
