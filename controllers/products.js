@@ -1,5 +1,5 @@
 import path from "path";
-import Product from "../model/products"; // Assuming your model is named 'Product', not 'products'
+import Products from "../model/products.js"; // Assuming your model is named 'Product', not 'products'
 
 export const productsController = {
     createProduct: async (req, res) => {
@@ -7,7 +7,7 @@ export const productsController = {
         const image = req.file.path;
 
         try {
-            const product = await Product.create({ title, image, artisanId });
+            const product = await Products.create({ title, image, artisanId });
             return res.status(201).json(product); // 201 status for successful creation
         } catch (error) {
             console.error(error);
@@ -31,7 +31,7 @@ export const productsController = {
 
     getProducts: async (req, res) => {
         try {
-            const foundProducts = await Product.find().populate('artisanId');
+            const foundProducts = await Products.find().populate('artisanId');
             return res.status(200).json(foundProducts);
         } catch (error) {
             console.error(error);
@@ -42,7 +42,7 @@ export const productsController = {
     deleteProduct: async (req, res) => {
         const { id } = req.params;
         try {
-            const deletedProduct = await Product.findByIdAndDelete(id);
+            const deletedProduct = await Products.findByIdAndDelete(id);
             if (deletedProduct) {
                 return res.status(200).json({ message: 'Product deleted successfully' });
             } else {
@@ -80,7 +80,7 @@ export const productsController = {
     getByArtisanId: async (req, res) => {
         try {
             const artisanId = req.params.artisanId;
-            const foundProducts = await Product.find({ artisanId }).populate('artisanId');
+            const foundProducts = await Products.find({ artisanId }).populate('artisanId');
             if (!foundProducts || foundProducts.length === 0) {
                 return res.status(404).json({ message: 'No products found for the specified artisan ID' });
             }

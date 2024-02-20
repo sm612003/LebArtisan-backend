@@ -1,6 +1,6 @@
 // authMiddleware.js
 import jwt from "jsonwebtoken";
-import User from "../Models/User.js";
+import User from "../model/user.js";
 import bcrypt, { compare } from "bcrypt";
 
 export const verifyToken = (req, res, next) => {

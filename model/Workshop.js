@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const workshopSchema = new mongoose.Schema({
   artisanId: { type: mongoose.Schema.Types.ObjectId, ref: 'Artist' },
@@ -15,4 +15,4 @@ const workshopSchema = new mongoose.Schema({
   about: { type: String }, // Description about the workshop attendees/target audience
 });
 
-module.exports = mongoose.model('Workshop', workshopSchema);
+export default mongoose.model("Workshop", workshopSchema);

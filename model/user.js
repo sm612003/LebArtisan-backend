@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     name:
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     { type: String,
          enum: ['admin', 'artist'],
           default: 'artist' },
-    picture:
+    image:
      {
          type: String 
         },
@@ -34,13 +34,13 @@ const userSchema = new mongoose.Schema({
         required:true
     },
     instagram:{
-        type:Number,
+        type:String,
         required:true
     },
     facebook:{
-        type:Number,
+        type:String,
         required:true
     }
 });
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model("User", userSchema);

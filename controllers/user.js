@@ -3,55 +3,72 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const userController = {
-    // Register a new user
-    register: async (req, res) => {
-        const { name, email, password, role, location,
-            whatsapp,
-            instagram,
-            facebook,
-        } = req.body;
-        const picture = req.file.path
-
-        try {
-            if (!password || typeof password !== "string" || password.length === 0) {
-                return res.status(400).json({ error: "Invalid password in the request body" });
-            }
-            const existingUser = await User.findOne({ email });
-            if (existingUser) {
-                return res.status(400).json({ error: "Email already exists" });
-            }
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-            const newUser = new User({
-                name,
-                email,
-                whatsapp,
-                location,
-                facebook,
-                instagram,
-                Picture:picture,
-                password: hashedPassword,
-                role: role || " artist",
-            });
-            await newUser.save();
-
-            const token = jwt.sign(
-                { _id: newUser._id, role: newUser.role, email, name },
-                process.env.SECRET_TOKEN,
-                { expiresIn: "24h" }
-            );
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "None",
-            });
-
-            return res.status(201).json(newUser);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: "Internal Server Error" });
+ // Register a new user
+ register: async (req, res) => {
+    const { name, email, password, role, location, whatsapp, instagram, facebook } = req.body;
+    const image = req.file?.path;
+    try {
+        // Check if password is provided
+        if (!password) {
+            return res.status(400).json({ error: "Password is required" });
         }
-    },
+        console.log("Received password:", password); // Log the received password
+
+        // Check if the provided password meets complexity requirements
+        // For example, minimum length and at least one uppercase, one lowercase, one number, and one special character
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({ error: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character" });
+        }
+
+        // Check if email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: "Email already exists" });
+        }
+
+        // Hash the password
+        const saltRounds = 10;
+        console.log("Hashing password...");
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        console.log("Password hashed successfully");
+
+        // Create a new user
+        const newUser = new User({
+            name,
+            email,
+            whatsapp,
+            location,
+            facebook,
+            instagram,
+           image: image ,
+            password: hashedPassword,
+            role: role || "artist", // Assuming default role is "artist"
+        });
+        await newUser.save();
+
+        // Create JWT token
+        const token = jwt.sign(
+            { _id: newUser._id, role: newUser.role, email, name },
+            process.env.SECRET_TOKEN,
+            { expiresIn: "24h" }
+        );
+
+        // Set token in cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+        });
+
+        return res.status(201).json(newUser);
+    } catch (error) {
+        console.error("Error occurred during user registration:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+,
 
     // Get a specific user by ID
     getOneUser: async (req, res) => {

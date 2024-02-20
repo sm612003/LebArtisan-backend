@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const artistSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -17,4 +17,4 @@ const artistSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Artist', artistSchema);
+export default mongoose.model("Artist", artistSchema);

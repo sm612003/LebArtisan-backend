@@ -1,4 +1,4 @@
-import Artist from "../model/Artist";
+import Artist from "../model/Artist.js";
 
 export const artistController = {
     // Create a new artist
