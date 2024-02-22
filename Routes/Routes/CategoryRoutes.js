@@ -5,7 +5,7 @@ import { categoryController } from "../../controllers/category.js";
 export const CategoryRoutes= express.Router()
 
 
-CategoryRoutes.post('/create',verifyToken, checkRole(["artist"]), uploadImage.single("image"),categoryController.createCategory)
+CategoryRoutes.post('/create',uploadImage.single("image"),categoryController.createCategory)
 CategoryRoutes.get('/:id',categoryController.getCategoryById)
 CategoryRoutes.get('/read/all',categoryController.getCategory)
 CategoryRoutes.delete('/:id',verifyToken, checkRole(["artist"]),categoryController.deleteCategory)

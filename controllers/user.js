@@ -7,6 +7,7 @@ export const userController = {
  register: async (req, res) => {
     const { name, email, password, role, location, whatsapp, instagram, facebook } = req.body;
     const image = req.file?.path;
+    console.log(req.body)
     try {
         // Check if password is provided
         if (!password) {
@@ -60,6 +61,7 @@ export const userController = {
             secure: process.env.NODE_ENV === "production",
             sameSite: "None",
         });
+        console.log("done")
 
         return res.status(201).json(newUser);
     } catch (error) {

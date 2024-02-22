@@ -5,7 +5,7 @@ import {verifyToken,checkRole} from  '../../Middlewares/authentication.js'
 export const productRoutes= express.Router()
 
 
-productRoutes.post('/create',verifyToken, checkRole(["artist"]), uploadImage.single("image"),productsController.createProduct)
+productRoutes.post('/create', uploadImage.single("image"),productsController.createProduct)
 productRoutes.get('/:id',productsController.getProductById)
 productRoutes.get('/read/all',productsController.getProducts)
 productRoutes.delete('/:id',verifyToken, checkRole(["artist"]),productsController.deleteProduct)

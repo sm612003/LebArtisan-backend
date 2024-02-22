@@ -5,9 +5,12 @@ import { artistController } from "../../controllers/artist.js";
 export const ArtistRoutes= express.Router()
 
 
-ArtistRoutes.post('/create',verifyToken, checkRole(["artist"]), uploadImage.single("image"),artistController.createArtist)
-ArtistRoutes.get('/:id',artistController.getArtistById)
-ArtistRoutes.get('/read/all',artistController.getAllArtists)
+ArtistRoutes.post('/create', uploadImage.single("image"),artistController.createArtist)
+// ArtistRoutes.get('/:id',artistController.getArtistById)
+// ArtistRoutes.get('/read/all',artistController.getAllArtists)
+ArtistRoutes.get('/artists', artistController.getAllArtistsData);
+
+ArtistRoutes.get('/:id', artistController.getArtistsByCategory); // Define routes with parameters after fixed routes
 ArtistRoutes.delete('/:id',verifyToken, checkRole(["artist"]),artistController.deleteArtistById)
 ArtistRoutes.put('/update',verifyToken, checkRole(["artist"]),uploadImage.single("image"),artistController.updateArtistById)
 
