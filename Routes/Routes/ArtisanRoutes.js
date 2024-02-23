@@ -7,7 +7,7 @@ export const ArtistRoutes= express.Router()
 
 ArtistRoutes.post('/create', uploadImage.single("image"),artistController.createArtist)
 // ArtistRoutes.get('/:id',artistController.getArtistById)
-// ArtistRoutes.get('/read/all',artistController.getAllArtists)
+ArtistRoutes.get('/read/all',artistController.getAllArtists)
 ArtistRoutes.get('/artists', artistController.getAllArtistsData);
 
 ArtistRoutes.get('/:id', artistController.getArtistsByCategory); // Define routes with parameters after fixed routes

@@ -2,19 +2,48 @@ import Event from "../model/Event.js";
 export const eventController = {
     // Create a new event
     createEvent: async (req, res) => {
-        const { title, description, location,  date_time, Artisans } = req.body;
-        const image = req.file.path
-
-
+        const { title, description, location, date, start_time, end_time } = req.body;
+        const image = req.file.path;
+    
         try {
-            const event = await Event.create({ title, description, location, image, date_time, Artisans });
+            const event = await Event.create({ 
+                title,
+                description,
+                location,
+                image,
+                date,
+                start_time,
+                end_time
+            });
+            
             return res.status(201).json(event); // 201 status for successful creation
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-    },
-
+    }
+    
+,    
+joinEvent :async (req, res) => {
+    const { eventId } = req.params;
+    const { artistData } = req.body;
+  
+    try {
+      const event = await Event.findById(eventId);
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+  
+      // Add artist to the event's Artisans array with default status 'pending'
+      event.Artisans.push({ artist: artistData });
+      await event.save();
+  
+      return res.status(201).json({ message: 'Artist joined event successfully' });
+    } catch (error) {
+      console.error('Error joining event:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
     // Get event by ID
     getEventById: async (req, res) => {
         const { id } = req.params;

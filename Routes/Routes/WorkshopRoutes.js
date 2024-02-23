@@ -5,7 +5,7 @@ import { workshopController } from "../../controllers/workshop.js";
 export const WorkshopRoutes= express.Router()
 
 
-WorkshopRoutes.post('/create',verifyToken, checkRole(["artist"]), uploadImage.single("image"),workshopController.createWorkshop)
+WorkshopRoutes.post('/create',uploadImage.single("image"),workshopController.createWorkshop)
 WorkshopRoutes.get('/:id',workshopController.getWorkshopById)
 WorkshopRoutes.get('/read/all',workshopController.getAllWorkshops)
 WorkshopRoutes.delete('/:id',verifyToken, checkRole(["artist"]),workshopController.deleteWorkshopById)

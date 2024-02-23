@@ -6,7 +6,7 @@ export const userController = {
  // Register a new user
  register: async (req, res) => {
     const { name, email, password, role, location, whatsapp, instagram, facebook } = req.body;
-    const image = req.file?.path;
+    const image = req.file?.path
     console.log(req.body)
     try {
         // Check if password is provided

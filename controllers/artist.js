@@ -13,6 +13,17 @@ export const artistController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+     // Get all artists
+     getAllArtists: async (req, res) => {
+        try {
+            const artists = await Artist.find().populate('userId');
+            return res.status(200).json(artists);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+,
     // Get all artists with user images and brand names
     getAllArtistsData: async (req, res) => {
         try {
