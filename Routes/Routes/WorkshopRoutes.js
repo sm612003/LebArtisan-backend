@@ -8,7 +8,7 @@ export const WorkshopRoutes= express.Router()
 WorkshopRoutes.post('/create',uploadImage.single("image"),workshopController.createWorkshop)
 WorkshopRoutes.get('/:id',workshopController.getWorkshopById)
 WorkshopRoutes.get('/read/all',workshopController.getAllWorkshops)
-WorkshopRoutes.delete('/:id',verifyToken, checkRole(["artist"]),workshopController.deleteWorkshopById)
+WorkshopRoutes.delete('/:id',workshopController.deleteWorkshopById)
 WorkshopRoutes.put('/update',verifyToken, checkRole(["artist"]),uploadImage.single("image"),workshopController.updateWorkshopById)
 
 export default WorkshopRoutes;

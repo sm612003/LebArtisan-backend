@@ -24,40 +24,41 @@ export const artistController = {
         }
     }
 ,
-    // Get all artists with user images and brand names
-    getAllArtistsData: async (req, res) => {
-        try {
-            // Fetch all artists
-            const artists = await Artist.find();
+getAllArtistsData: async (req, res) => {
+    try {
+        // Fetch all artists
+        const artists = await Artist.find();
+        
+        // Map over artists array to modify the data
+        const modifiedArtists = await Promise.all(artists.map(async (artist) => {
+            // Extract brand name from the artist
+            const brandName = artist.BrandName;
             
-            // Map over artists array to modify the data
-            const modifiedArtists = await Promise.all(artists.map(async (artist) => {
-                // Extract brand name from the artist
-                const brandName = artist.BrandName;
-                
-                // Extract user's image from the userId
-                const User = await user.findById(artist.userId);
-                const userImage = User.image; // Assuming the image is stored in a field named "image" in the User model
-                
-                // Return modified artist object
-                return {
-                    _id: artist._id,
-                    userId: artist.userId,
-                    categoryId: artist.categoryId,
-                    craftType: artist.craftType,
-                    bio: artist.bio,
-                    about_us: artist.about_us,
-                    BrandName: brandName,
-                    userImage: userImage
-                };
-            }));
+            // Extract user's image from the userId if user exists
+            const User = await user.findById(artist.userId);
+            const userImage = User ? User.image : null; // Check if User exists
             
-            return res.status(200).json(modifiedArtists);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-    },
+            // Return modified artist object
+            return {
+                _id: artist._id,
+                userId: artist.userId,
+                categoryId: artist.categoryId,
+                craftType: artist.craftType,
+                bio: artist.bio,
+                about_us: artist.about_us,
+                BrandName: brandName,
+                userImage: userImage
+            };
+        }));
+        
+        return res.status(200).json(modifiedArtists);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+},
+
+
  // Get artists by category
 // Get artists by category
 getArtistsByCategory: async (req, res) => {

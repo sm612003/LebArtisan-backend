@@ -10,7 +10,10 @@ const workshopSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  materials: [{ type: String }], // Array of materials required for the workshop
+  materials: [{
+    name: { type: String, required: true },
+    description: { type: String, maxlength: 300 } // Maximum length of 300 characters for description
+  }], // Array of material objects
   cost: { type: Number }, // Cost of the workshop
   about: { type: String }, // Description about the workshop attendees/target audience
 });
