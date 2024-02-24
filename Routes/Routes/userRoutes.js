@@ -6,7 +6,7 @@ import uploadImage from "../../Middlewares/multer.js";
 export const userRoutes = express.Router();
 
 userRoutes.post('/register',uploadImage.single("image"), userController.register);
-userRoutes.get('/all', verifyToken, checkRole(["admin"]), userController.getAllUsers);
+userRoutes.get('/all',  userController.getAllUsers);
 userRoutes.get('/:id', verifyToken, userController.getUserById);
 userRoutes.put('/:id', verifyToken, userController.updateUserById);
 userRoutes.delete('/:id', verifyToken, checkRole(["admin"]), userController.deleteUserById);

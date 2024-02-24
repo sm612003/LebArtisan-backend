@@ -107,16 +107,33 @@ getArtistsByCategory: async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 },
-getArtistById: async (req, res) => {
+ getArtistById : async (req, res) => {
     const artistId = req.params.id;
     try {
         const artist = await Artist.findById(artistId);
         if (!artist) {
             return res.status(404).json({ error: 'Artist not found' });
         }
+        
+        // Fetch user details based on the artist's userId
+        const User = await user.findById(artist.userId);
+        if (!User) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Combine artist and user information
+        const artistWithUserDetails = {
+            ...artist.toObject(),
+            location: User.location,
+            whatsapp: User.whatsapp,
+            facebook: User.facebook,
+            instagram: User.instagram
+        };
+
         // Prepend the base URL of your backend server to the video URL
-        artist.about_us.videoUrl = `${req.protocol}://${req.get('host')}/${artist.about_us.video}`;
-        return res.status(200).json(artist);
+        artistWithUserDetails.about_us.videoUrl = `${req.protocol}://${req.get('host')}/${artist.about_us.video}`;
+
+        return res.status(200).json(artistWithUserDetails);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' });
