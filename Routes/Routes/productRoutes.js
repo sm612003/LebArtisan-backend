@@ -8,8 +8,9 @@ export const productRoutes= express.Router()
 productRoutes.post('/create', uploadImage.single("image"),productsController.createProduct)
 productRoutes.get('/:id',productsController.getProductById)
 productRoutes.get('/read/all',productsController.getProducts)
-productRoutes.delete('/:id',verifyToken, checkRole(["artist"]),productsController.deleteProduct)
+productRoutes.get('/image/:artisanId', productsController.getProductsByArtisanId);
+
+productRoutes.delete('/:id',productsController.deleteProduct)
 productRoutes.put('/update',verifyToken, checkRole(["artist"]),uploadImage.single("image"),productsController.editProduct)
-productRoutes.get('/artisan/:id',productsController.getByArtisanId)
 
 export default productRoutes;

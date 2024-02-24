@@ -14,11 +14,21 @@ export const productsController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
-
+    getProductsByArtistId : async (artistId) => {
+        try {
+          // Find all products with the given artistId
+          const products = await Products.find({ artisanId: artistId }).select("title image");
+      
+          return products;
+        } catch (error) {
+          console.error("Error fetching products by artist ID:", error);
+          throw error;
+        }
+      },
     getProductById: async (req, res) => {
         const { id } = req.params;
         try {
-            const product = await Product.findById(id).populate('artisanId');
+            const product = await products.findById(id).populate('artisanId');
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
@@ -77,17 +87,24 @@ export const productsController = {
         }
     },
 
-    getByArtisanId: async (req, res) => {
+    getProductsByArtisanId: async (req, res) => {
+        const { artisanId } = req.params; // Assuming artisanId is passed as a parameter in the request URL
+
         try {
-            const artisanId = req.params.artisanId;
-            const foundProducts = await Products.find({ artisanId }).populate('artisanId');
-            if (!foundProducts || foundProducts.length === 0) {
-                return res.status(404).json({ message: 'No products found for the specified artisan ID' });
+            // Find all products with the given artisanId
+            const products = await Products.find({ artisanId }).select("title image");
+
+            // Check if any products were found
+            if (products.length === 0) {
+                return res.status(404).json({ message: "No products found for the specified artisan ID" });
             }
-            return res.status(200).json(foundProducts);
+
+            // Return the products with titles and images
+            return res.status(200).json(products);
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'Internal Server Error' });
+            console.error("Error fetching products by artisan ID:", error);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
+    
 };

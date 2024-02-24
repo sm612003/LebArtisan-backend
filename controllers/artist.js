@@ -2,17 +2,52 @@ import Artist from "../model/Artist.js";
 import user from "../model/user.js";
 export const artistController = {
     // Create a new artist
+    // createArtist: async (req, res) => {
+    //     const { userId, categoryId, craftType, bio, about_us, BrandName } = req.body;
+
+    //     try {
+    //         const artist = await Artist.create({ userId, categoryId, craftType, bio, about_us, BrandName });
+    //         return res.status(201).json(artist); // 201 status for successful creation
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(500).json({ error: 'Internal Server Error' });
+    //     }
+    // },
     createArtist: async (req, res) => {
         const { userId, categoryId, craftType, bio, about_us, BrandName } = req.body;
-
+      
         try {
-            const artist = await Artist.create({ userId, categoryId, craftType, bio, about_us, BrandName });
-            return res.status(201).json(artist); // 201 status for successful creation
+          // Get the video file from the request
+          const videoFile = req.file;
+      
+          // Assuming the video file is uploaded successfully and its path is stored in req.file
+          const videoUrl = req.file.path; // This will give you the path of the uploaded video file
+      
+          // Extract title and description from the request body
+          const { title, description } = about_us;
+      
+          // Create the artist with the video URL, title, and description
+          const artist = await Artist.create({ 
+            userId, 
+            categoryId, 
+            craftType, 
+            bio, 
+            about_us: { 
+              title, 
+              description, 
+              video: videoUrl 
+            }, 
+            BrandName 
+          });
+      
+          return res.status(201).json(artist); // 201 status for successful creation
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Internal Server Error' });
+          console.error(error);
+          return res.status(500).json({ error: 'Internal Server Error' });
         }
-    },
+      },
+      
+    
      // Get all artists
      getAllArtists: async (req, res) => {
         try {
@@ -72,6 +107,23 @@ getArtistsByCategory: async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 },
+getArtistById: async (req, res) => {
+    const artistId = req.params.id;
+    try {
+        const artist = await Artist.findById(artistId);
+        if (!artist) {
+            return res.status(404).json({ error: 'Artist not found' });
+        }
+        // Prepend the base URL of your backend server to the video URL
+        artist.about_us.videoUrl = `${req.protocol}://${req.get('host')}/${artist.about_us.video}`;
+        return res.status(200).json(artist);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+,
     // Get artist by ID
     // getArtistById: async (req, res) => {
     //     const { id } = req.params;

@@ -8,7 +8,7 @@ const artistSchema = new mongoose.Schema({
   about_us: {
     title: { type: String },
     description: { type: String },
-    video_url: { type: String } // URL of the video
+    video: { type: String } // URL of the video
   },
   BrandName: {
   type:String,
