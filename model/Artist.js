@@ -12,7 +12,6 @@ const artistSchema = new mongoose.Schema({
   },
   BrandName: {
   type:String,
-  required:true,
   }
 });
 

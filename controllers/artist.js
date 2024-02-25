@@ -13,39 +13,39 @@ export const artistController = {
     //         return res.status(500).json({ error: 'Internal Server Error' });
     //     }
     // },
-    createArtist: async (req, res) => {
+    createArtist : async (req, res) => {
         const { userId, categoryId, craftType, bio, about_us, BrandName } = req.body;
       
         try {
-          // Get the video file from the request
-          const videoFile = req.file;
-      
-          // Assuming the video file is uploaded successfully and its path is stored in req.file
-          const videoUrl = req.file.path; // This will give you the path of the uploaded video file
-      
-          // Extract title and description from the request body
-          const { title, description } = about_us;
-      
-          // Create the artist with the video URL, title, and description
-          const artist = await Artist.create({ 
-            userId, 
-            categoryId, 
-            craftType, 
-            bio, 
-            about_us: { 
-              title, 
-              description, 
-              video: videoUrl 
-            }, 
-            BrandName 
-          });
-      
-          return res.status(201).json(artist); // 201 status for successful creation
+            // Get the video file from the request
+            const videoFile = req.file;
+        
+            // Assuming the video file is uploaded successfully and its path is stored in req.file
+            const videoUrl = req.file.path; // This will give you the path of the uploaded video file
+        
+            // Extract title and description from the request body
+            const { title, description } = about_us;
+        
+            // Create the artist with the video URL, title, and description
+            const artist = await Artist.create({ 
+                userId, 
+                categoryId, 
+                craftType, 
+                bio, 
+                about_us: { 
+                    title, 
+                    description, 
+                    video: videoUrl 
+                }, 
+                BrandName 
+            });
+        
+            return res.status(201).json(artist); // 201 status for successful creation
         } catch (error) {
-          console.error(error);
-          return res.status(500).json({ error: 'Internal Server Error' });
+            console.error(error);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-      },
+    },
       
     
      // Get all artists

@@ -9,7 +9,7 @@ userRoutes.post('/register',uploadImage.single("image"), userController.register
 userRoutes.get('/all',  userController.getAllUsers);
 userRoutes.get('/:id', verifyToken, userController.getUserById);
 userRoutes.put('/:id', verifyToken, userController.updateUserById);
-userRoutes.delete('/:id', verifyToken, checkRole(["admin"]), userController.deleteUserById);
+userRoutes.delete('/:id',  userController.deleteUserById);
 
 userRoutes.get('/read/one', verifyToken, userController.getOneUser);
 

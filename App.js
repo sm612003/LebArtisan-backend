@@ -17,6 +17,7 @@ import WorkshopRoutes from "./Routes/Routes/WorkshopRoutes.js";
 import EventRoutes from "./Routes/Routes/EventsRoutes.js";
 import CategoryRoutes from "./Routes/Routes/CategoryRoutes.js";
 import ArtistRoutes from "./Routes/Routes/ArtisanRoutes.js";
+import upload from "./Middlewares/multer.js";
 
 const app = express();
 
@@ -25,7 +26,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
   }));
-
+// Define the endpoint to handle video uploads
+app.post("/upload-video", upload.single('video'), (req, res) => {
+  // If the file is uploaded successfully, send a response
+  res.send("Video uploaded successfully");
+});
 const corsOption = {
   origin: "http://localhost:3000",
   credentials: true,
@@ -60,8 +65,12 @@ app.post("/login", login);
 app.post("/logout", logOut);
 
 app.use('/images',express.static('images'))
+app.use('/videos', express.static('videos'));
+
 
 app.get("/logged-in-user", verifyToken, loggedInUser);
 
 
 app.post("/logout", logOut);
+
+// app.use("/public", express.static(path.join(__dirname, "public")));
