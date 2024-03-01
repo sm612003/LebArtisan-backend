@@ -32,7 +32,9 @@ app.post("/upload-video", upload.single('video'), (req, res) => {
   res.send("Video uploaded successfully");
 });
 const corsOption = {
-  origin: "*",
+  origin: [
+    "http://localhost:3000","https://homedy.vercel.app"
+  ],
   credentials: true,
   optionsSuccessStatus: 200,
 };
