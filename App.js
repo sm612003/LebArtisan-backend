@@ -32,7 +32,7 @@ app.post("/upload-video", upload.single('video'), (req, res) => {
   res.send("Video uploaded successfully");
 });
 const corsOption = {
-  origin: "http://localhost:3000",
+  origin: "*",
   credentials: true,
   optionsSuccessStatus: 200,
 };
