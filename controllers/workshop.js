@@ -28,7 +28,41 @@ export const workshopController = {
         }
     }
 ,
+// / Controller function to get all workshops for a specific artisan
+ // Controller function to get all workshops for the currently logged-in artisan
+ // Controller function to get all workshops for the currently logged-in artisan
 
+  getWorkshopsByArtisanId : async (req, res) => {
+    try {
+      // Extract artist user ID from the authenticated user
+      const artistUserId = req.user._id; // Assuming the user ID is available in req.user
+  
+      // Find the artist based on the user ID
+      const artist = await Artist.findOne({ userId: artistUserId });
+  
+      if (!artist) {
+        return res.status(404).json({ message: 'Artist not found' });
+      }
+  
+      // Retrieve artisan ID from the found artist
+      const artisanId = artist._id;
+  
+      // Query the Workshop model to find workshops associated with the provided artisanId
+      const workshops = await Workshop.find({ artisanId }).populate('artisanId');
+  
+      if (!workshops || workshops.length === 0) {
+        // If no workshops are found, return 404 Not Found
+        return res.status(404).json({ message: "Workshops not found for this artisan." });
+      }
+  
+      // If workshops are found, return them
+      return res.status(200).json(workshops);
+    } catch (error) {
+      // If an error occurs during the database query, return 500 Internal Server Error
+      console.error("Error fetching workshops:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
     // Get workshop by ID
     getWorkshopById: async (req, res) => {
         const { id } = req.params;

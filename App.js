@@ -35,6 +35,7 @@ const corsOption = {
   origin: [
     "http://localhost:3000","https://homedy.vercel.app"
   ],
+  // origin:"http://localhost:3000",
   credentials: true,
   optionsSuccessStatus: 200,
 };

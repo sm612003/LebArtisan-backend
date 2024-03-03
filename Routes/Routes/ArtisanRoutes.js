@@ -14,6 +14,6 @@ ArtistRoutes.get('/:id', artistController.getArtistById);
 
 ArtistRoutes.get('/ByCategory/:id', artistController.getArtistsByCategory); // Define routes with parameters after fixed routes
 ArtistRoutes.delete('/:id',artistController.deleteArtistById)
-ArtistRoutes.put('/update',verifyToken, checkRole(["artist"]),uploadImage.single("image"),artistController.updateArtistById)
+ArtistRoutes.put('/update',uploadImage.single("image"),artistController.updateArtistById)
 
 export default ArtistRoutes;
