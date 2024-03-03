@@ -175,34 +175,41 @@ joinEvent :async (req, res) => {
     
     ,
   // Function for the admin to manage event participation requests
- manageEventParticipationRequest : async (req, res) => {
-    try {
-      const { eventId, artistId, status } = req.body;
-  
+manageEventParticipationRequest: async (req, res) => {
+  try {
+      const { eventId, participationRequests } = req.body;
+
       // Check if the event exists
       const event = await Event.findById(eventId);
       if (!event) {
-        return res.status(404).json({ message: "Event not found" });
+          return res.status(404).json({ message: "Event not found" });
       }
-  
-      // Find the artist's participation request
-      const requestIndex = event.Artisans.findIndex(request => request.artist.toString() === artistId);
-      if (requestIndex === -1) {
-        return res.status(404).json({ message: "Artist participation request not found" });
-      }
-  
-      // Update the status of the artist's participation request
-      event.Artisans[requestIndex].status = status;
-      await event.save();
-  
-      return res.status(200).json({ message: "Event participation request updated successfully" });
-    } catch (error) {
-      console.error("Error managing event participation request:", error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  },
 
-  
+      // Ensure that participationRequests is an array
+      if (!Array.isArray(participationRequests)) {
+          return res.status(400).json({ message: "Participation requests must be an array" });
+      }
+
+      // Update the status of each artist's participation request using a for...of loop
+      for (const { artistId, status } of participationRequests) {
+          const requestIndex = event.Artisans.findIndex(request => request.artist.toString() === artistId);
+          if (requestIndex !== -1) {
+              event.Artisans[requestIndex].status = status;
+          }
+      }
+
+      // Save the updated event
+      await event.save();
+
+      return res.status(200).json({ message: "Event participation requests updated successfully" });
+  } catch (error) {
+      console.error("Error managing event participation requests:", error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+},
+
+
+
 // Backend Controller to get all artists with status "accepted" for a specific event
 // Backend Controller to get all artists with status "accepted" for a specific event
 getAcceptedArtistsForEvent: async (req, res) => {
