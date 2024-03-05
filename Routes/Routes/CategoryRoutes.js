@@ -9,6 +9,6 @@ CategoryRoutes.post('/create',uploadImage.single("image"),categoryController.cre
 CategoryRoutes.get('/:id',categoryController.getCategoryById)
 CategoryRoutes.get('/read/all',categoryController.getCategory)
 CategoryRoutes.delete('/:id',verifyToken, checkRole(["artist"]),categoryController.deleteCategory)
-CategoryRoutes.put('/update',verifyToken, checkRole(["artist"]),uploadImage.single("image"),categoryController.updateCategory)
+CategoryRoutes.put('/update/:id',uploadImage.single("image"),categoryController.updateCategory)
 
 export default CategoryRoutes;
