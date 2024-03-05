@@ -14,7 +14,7 @@ EventRoutes.post('/request', verifyToken, checkRole(["artist"]),eventController.
 EventRoutes.put('/admin/manage',eventController.manageEventParticipationRequest);
 
 EventRoutes.delete('/:id',verifyToken, checkRole(["admin"]),eventController.deleteEventById)
-EventRoutes.put('/update',verifyToken, checkRole(["admin"]),uploadImage.single("image"),eventController.updateEventById)
+EventRoutes.put('/update/:id',uploadImage.single("image"),eventController.updateEventById)
 EventRoutes.post('/:eventId/join', eventController.joinEvent);
 
  export default EventRoutes;
